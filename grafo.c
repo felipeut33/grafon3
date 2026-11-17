@@ -1,32 +1,43 @@
+/* Brayan Marques Eger, Jonathan Felipe Dinis Kovaleski, Felipe Utpadel e Samuel Lampert Alchini */
+
+#include <string.h>
+
+#include "grafo.h"
+
 void construirGrafo(Grafo *grafo)
 {
     int i;
     int j;
 
-    grafo->nomes[BLOCO_A] = "Bloco A";
-    grafo->nomes[BLOCO_B] = "Bloco B";
-    grafo->nomes[LABORATORIO] = "Laboratorio";
-    grafo->nomes[REFEITORIO] = "Refeitorio";
-    grafo->nomes[BIBLIOTECA] = "Biblioteca";
+    grafo->quantidade = NUM_PREDIOS;
 
-    for (i = 0; i < NUM_PREDIOS; i++) {
-        for (j = 0; j < NUM_PREDIOS; j++) {
-            grafo->adjacencia[i][j] = 0;
+    strcpy(grafo->nomes[BLOCO_B], "Bloco B");
+    strcpy(grafo->nomes[LABORATORIO], "Laboratorio");
+    strcpy(grafo->nomes[BLOCO_A], "Bloco A");
+    strcpy(grafo->nomes[REFEITORIO], "Refeitorio");
+    strcpy(grafo->nomes[BIBLIOTECA], "Biblioteca");
+
+    for (i = 0; i < MAX_VERTICES; i++) {
+        for (j = 0; j < MAX_VERTICES; j++) {
+            grafo->matriz[i][j] = 0;
         }
     }
 
-    grafo->adjacencia[BLOCO_B][LABORATORIO] = 240;
-    grafo->adjacencia[LABORATORIO][BLOCO_B] = 240;
+    adicionarAresta(grafo, BLOCO_B, LABORATORIO, 240);
+    adicionarAresta(grafo, LABORATORIO, BLOCO_A, 210);
+    adicionarAresta(grafo, BLOCO_A, REFEITORIO, 190);
+    adicionarAresta(grafo, REFEITORIO, BIBLIOTECA, 280);
+    adicionarAresta(grafo, BIBLIOTECA, BLOCO_A, 160);
+}
 
-    grafo->adjacencia[LABORATORIO][BLOCO_A] = 210;
-    grafo->adjacencia[BLOCO_A][LABORATORIO] = 210;
+/* Grafo nao direcionado: grava o peso nos dois sentidos */
+void adicionarAresta(Grafo *grafo, int origem, int destino, int peso)
+{
+    if (origem < 0 || origem >= grafo->quantidade ||
+        destino < 0 || destino >= grafo->quantidade || peso <= 0) {
+        return;
+    }
 
-    grafo->adjacencia[BLOCO_A][REFEITORIO] = 190;
-    grafo->adjacencia[REFEITORIO][BLOCO_A] = 190;
-
-    grafo->adjacencia[REFEITORIO][BIBLIOTECA] = 280;
-    grafo->adjacencia[BIBLIOTECA][REFEITORIO] = 280;
-
-    grafo->adjacencia[BIBLIOTECA][BLOCO_A] = 160;
-    grafo->adjacencia[BLOCO_A][BIBLIOTECA] = 160;
+    grafo->matriz[origem][destino] = peso;
+    grafo->matriz[destino][origem] = peso;
 }

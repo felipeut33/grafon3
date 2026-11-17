@@ -17,8 +17,6 @@ int lerInteiro(const char *mensagem, int *valor);
 int lerTexto(const char *mensagem, char texto[], int tamanho);
 int compararSemDiferenciarCaixa(const char texto1[], const char texto2[]);
 
-void inicializarGrafo(Grafo *grafo);
-void adicionarAresta(Grafo *grafo, int origem, int destino, int peso);
 void exibirMenu(void);
 void exibirMapa(const Grafo *grafo);
 int selecionarPredio(const Grafo *grafo, const char *tipo);
@@ -149,47 +147,6 @@ int compararSemDiferenciarCaixa(const char texto1[], const char texto2[])
 }
 
 
-void inicializarGrafo(Grafo *grafo)
-{
-    int i;
-    int j;
-
-
-    grafo->quantidade = 5;
-
-    strcpy(grafo->nomes[0], "Bloco B");
-    strcpy(grafo->nomes[1], "Laboratorio");
-    strcpy(grafo->nomes[2], "Bloco A");
-    strcpy(grafo->nomes[3], "Refeitorio");
-    strcpy(grafo->nomes[4], "Biblioteca");
-
-    for (i = 0; i < MAX_VERTICES; i++) {
-        for (j = 0; j < MAX_VERTICES; j++) {
-            grafo->matriz[i][j] = 0;
-        }
-    }
-
-
-    adicionarAresta(grafo, 0, 1, 240);
-    adicionarAresta(grafo, 1, 2, 210);
-    adicionarAresta(grafo, 2, 3, 190);
-    adicionarAresta(grafo, 3, 4, 280);
-    adicionarAresta(grafo, 4, 2, 160);
-}
-
-
-void adicionarAresta(Grafo *grafo, int origem, int destino, int peso)
-{
-    if (origem < 0 || origem >= grafo->quantidade ||
-        destino < 0 || destino >= grafo->quantidade || peso <= 0) {
-        return;
-    }
-
-    grafo->matriz[origem][destino] = peso;
-    grafo->matriz[destino][origem] = peso;
-}
-
-
 void exibirMenu(void)
 {
     printf("\n============================================================\n");
@@ -309,14 +266,8 @@ void encontrarMenorRota(const Grafo *grafo)
 
     destino = selecionarPredio(grafo, "destino");
     if (destino == -1) {
-        printf("Operacao cancelada.\n");4
+        printf("Operacao cancelada.\n");
         return;
-    }
-
-  
-    for (i = 0; i < MAX_VERTICES; i++) {
-        distancias[i] = INFINITO;
-        predecessores[i] = -1;
     }
 
     dijkstra(grafo, origem, distancias, predecessores);
@@ -430,8 +381,7 @@ int main(void)
     int matrizAlcancabilidade[MAX_VERTICES][MAX_VERTICES];
     int opcao;
 
-    inicializarGrafo(&campus);
-
+    construirGrafo(&campus);
 
     floydWarshall(&campus, matrizDistanciasFloyd, matrizAlcancabilidade);
 
