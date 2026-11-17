@@ -2,6 +2,7 @@
 #define GRAFO_H
 
 #define NUM_PREDIOS 5
+#define INFINITO 1000000000
 
 enum Predio {
     BLOCO_A,
@@ -17,5 +18,6 @@ typedef struct {
 } Grafo;
 
 void construirGrafo(Grafo *grafo);
+void dijkstra(const Grafo *g, int origem, int dist[], int anterior[]);
 
 #endif
